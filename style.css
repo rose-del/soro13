@@ -1,0 +1,46 @@
+:root{ 
+    --bg:#0f1720; 
+    --card:#111827; 
+    --accent:#8b5cf6; 
+    --muted:#9ca3af; 
+}
+
+*{
+    box-sizing: border-box;
+    font-family: Inter, system-ui, sans-serif
+}
+
+html,body,#chat-container{
+    height: 100%
+}
+
+body{
+    margin: 0;
+    background: linear-gradient(180deg,#031026 0%, #0b1220 100%);
+    color:#e6eef8;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px
+}
+
+.app{
+    width: 100%;
+    max-width: 420px;
+    background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.02));border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(2,6,23,0.7);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column
+}
+
+header{
+    padding:18px 18px 0
+}
+
+
+@media (max-width:420px){
+    .app{
+        height:95vh
+    }
+}
