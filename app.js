@@ -1,10 +1,27 @@
-const cancelarInscricao = EventBus.subscribe("teste", (dados) => {
-    console.log("Recebi dados:", dados);
+const sm = GerenciadorState();
+sm.register('A', ()=> console.log('Entrei em A'));
+sm.register('B', ()=> console.log('Entrei em B'));
+
+EventBus.subscribe('estadoAlterado', e => console.log('Observer:', e.state));
+
+sm.go('A'); // -> "Entrei em A", "Observer: A"
+sm.go('B'); // -> "Entrei em B", "Observer: B"
+console.log('Atual:', sm.estadoAtual()); // -> "B"
+
+const s = JogoEstado.getInstancia();
+
+const off = EventBus.subscribe('mensagemAdicionada', () => {
+  console.log('Renderizar!', s.mensagens.at(-1));
 });
 
-EventBus.publish("teste", { mensagem: "Jesus é o caminho, a verdade e a vida!" });
+// Executar estratégias
+Strategies.salvarTodos(s);
+console.assert(s.flags.rescueMode === 'todos');
 
-cancelarInscricao();
+Strategies.salvarIrma(s);
+console.assert(s.flags.rescueMode === 'irmã');
 
-// Serve para publicar de novo para ver se o ouvinte já não responde mais
-EventBus.publish("teste", { mensagem: "Você deveria ver isso" });
+Strategies.queimarTudo(s);
+console.assert(s.flags.rescueMode === 'queimar');
+
+off();
