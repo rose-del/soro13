@@ -71,6 +71,52 @@ main{
     line-height:1.25;
 }
 
+.msg.sistema{
+    background:transparent;
+    color:var(--muted);
+    font-size:0.85rem;
+    text-align:center
+}
+
+.msg.me{
+    background:rgba(139,92,246,0.12);
+    align-self:flex-end
+}
+
+.msg.them{
+    background:rgba(255,255,255,0.03);
+    align-self:flex-start
+}
+
+.escolhas{
+    padding:12px;
+    border-top:1px solid rgba(255,255,255,0.02);
+    display:flex;
+    flex-direction:column;
+    gap:8px
+}
+
+.escolhas-btn{
+    background:transparent;
+    border:1px solid rgba(255,255,255,0.06);
+    padding:10px;
+    border-radius:8px;
+    color:inherit;
+    cursor:pointer;
+    text-align:left
+}
+
+.escolhas-btn:hover{
+    border-color:var(--accent)
+}
+
+footer{
+    padding:10px 16px;
+    background:linear-gradient(180deg, rgba(0,0,0,0.02), transparent);
+    font-size:0.75rem;
+    color:var(--muted)
+}
+
 @media (max-width:420px){
     .app{
         height:95vh
