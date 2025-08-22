@@ -278,13 +278,121 @@
         ]);
     });
 
-    sm.register('bloco8A', () => {
-        enviarMensagem('sistema', 'Sim, quando um casal foi ao orfananto ele ficou interessado em nós duas, mas eles infelizmente só levou uma embora... Quantos anos vocês tinham naquele tempo?');
+    sm.register('bloco7B', () => {
+        enviarMensagem('sistema', 'Vingança? Por acaso alguém próximo seu também passou por esse Dr. Verruct?');
 
-        enviarMensagem('them', 'Tinhamos 9 anos naquela época quando fomos transferidos para esse orfanato. Tudo ia bem, até que crescemos, ficamos maior de idade e o pessoal do orfanato começou a fazer coisas estranhas.')
-        enviarMensagem('them', 'Crianças sumindo, gritos... Até que houve um dia em que a Paty, minha namorada, não apareceu mais.')
-    })
+        enviarMensagem('them', '')
+        showEscolhas([
+            {text: 'O que aconteceu com você?', next: 'bloco7A'},
+        ]);
+    });
+
+    sm.register('bloco8A', () => {
+        enviarMensagem('sistema', 'Sim... quando um casal visitou o orfanato, eles demonstraram interesse por nós duas. Mas, no fim, só levaram uma... Quantos anos vocês tinham naquela época mesmo?');
+
+        enviarMensagem('them', 'Nós tínhamos 9 anos quando fomos transferidos para aquele lugar. No começo parecia tudo normal, mas conforme crescemos e atingimos a maioridade, as coisas começaram a mudar.');
+        enviarMensagem('them', 'Crianças começaram a desaparecer, à noite se ouviam gritos... E então, um dia, a Paty, minha namorada, simplesmente não voltou mais.');
+
+        showEscolhas([
+            {text: 'Sumiu? Como??', next: 'bloco9A'},
+            {text: 'Eu sinto muito por isso', next: 'bloco9B'}
+        ]);
+    });
+
+    sm.register('bloco9A', () => {
+        enviarMensagem('sistema', 'Sumiu? Como??');
+
+        enviarMensagem('them', 'Eles… eles diziam que era uma chance.');
+        enviarMensagem('them', 'Chamavam algumas meninas do orfanato para "ajudar" no hospital do velho dono. Paty foi uma delas');
+        enviarMensagem('them', 'Lembro da felicidade dela… parecia que finalmente teria um propósito, algo além daqueles corredores frios.')
+        enviarMensagem('them', 'Mas cada vez que voltava… Voltava diferente.');
+
+        showEscolhas([
+            {text: '(não dizer nada)', next: 'bloco9C'},
+            {text: 'Eu sinto muito por isso', next: 'bloco9B'}
+        ]);
+    });
     
+    sm.register('bloco9B', () => {
+        enviarMensagem('sistema', 'Eu sinto muito por isso');
+
+        enviarMensagem('them', 'Eles… eles diziam que era uma chance.');
+        enviarMensagem('them', 'Chamavam algumas meninas do orfanato para "ajudar" no hospital do velho dono. Paty foi uma delas');
+        enviarMensagem('them', 'Lembro da felicidade dela… parecia que finalmente teria um propósito, algo além daqueles corredores frios.')
+        enviarMensagem('them', 'Mas cada vez que voltava… Voltava diferente.');
+
+        showEscolhas([
+            {text: 'Diferente como?', next: 'bloco10A'},
+            {text: 'O que houve com ela', next: 'bloco10B'}
+        ]);
+    });
+
+    sm.register('bloco9C', () => {
+        enviarMensagem('sistema', '');
+
+        enviarMensagem('them', 'Eles… eles diziam que era uma chance.');
+        enviarMensagem('them', 'Chamavam algumas meninas do orfanato para "ajudar" no hospital do velho dono. Paty foi uma delas');
+        enviarMensagem('them', 'Lembro da felicidade dela… parecia que finalmente teria um propósito, algo além daqueles corredores frios.')
+        enviarMensagem('them', 'Mas cada vez que voltava… Voltava diferente.');
+
+        showEscolhas([
+            {text: 'Diferente como?', next: 'bloco10A'},
+            {text: 'O que houve com ela', next: 'bloco10B'}
+        ]);
+    });
+
+    sm.register('bloco10A', () => {
+        enviarMensagem('sistema', 'Diferente como?');
+
+        enviarMensagem('them', 'O olhar dela… se tornou vazio. Como se estivesse presa em algum lugar que eu não podia alcançar.');
+        enviarMensagem('them', 'Até que um dia ela simplesmente não voltou.');
+
+        showEscolhas([
+            {text: 'E como você sabe que o responsável foi o Dr. Verruct?', next: '11A'}
+        ]);
+    });
+
+    sm.register('bloco10B', () => {
+        enviarMensagem('sistema', 'O que houve com ela');
+
+        enviarMensagem('them', 'Ela simplesmente não voltou.');
+        enviarMensagem('them', 'Eu a vi sumindo pouco a poucoO olhar dela… se tornou vazio. Como se estivesse presa em algum lugar que eu não podia alcançar.');
+        enviarMensagem('them', 'O olhar dela… se tornou vazio. Como se estivesse presa em algum lugar que eu não podia alcançar.');
+        
+
+        showEscolhas([
+            {text: 'E como você sabe que o responsável foi o Dr. Verruct?', next: '11A'}
+        ]);
+    });
+
+    sm.register('bloco11A', () => {
+        enviarMensagem('sistema', 'E como você sabe que o responsável foi o Dr. Verruct?');
+
+        enviarMensagem('them', 'Porque eu fui procurar ela, fui atrás dela');
+        enviarMensagem('them', 'Não acreditei quando me disseram que ela fugiu com outro homem');
+        
+
+        showEscolhas([
+            {text: 'O que foi que você achou?', next: '11B'}
+        ]);
+    });
+
+    sm.register('bloco11B', () => {
+        enviarMensagem('sistema', 'O que foi que você achou?');
+
+        estado.mensagens.push({
+            from: 'them',
+            type: 'image',
+            src: './public/image/foto-atofinal.png',
+        });
+        EventBus.publish('mensagemAdicionada');
+        
+
+        showEscolhas([
+            {text: 'Final do capítulo 1', next: '11B'}
+        ]);
+    });
+
     // Aqui iniciamos o jogo
     sm.go(estado.capitulo);
     renderizarMensagem();
