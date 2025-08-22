@@ -382,7 +382,7 @@
         
 
         showEscolhas([
-            {text: 'O que foi que você achou?', next: '11B'}
+            {text: 'O que foi que você achou?', next: 'bloco11B'}
         ]);
     });
 
