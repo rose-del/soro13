@@ -1,5 +1,16 @@
+/**
+ * Aqui é onde toda a magia acontece. Este arquivo orquestra a lógica
+ * do jogo, utilizando todos os padrões de projeto que definimos.
+*/
+
 (function(){
+
+    // *Padrão Singleton:* Obtém a única instância do estado do jogo.
+    // Isso garante que todos os componentes trabalhem com os mesmos dados
     const estado = JogoEstado.getInstancia();
+
+    // *Padrão State:* Inicializa o gerenciador de estados para controlar
+    // a navegação entre os blocos de diálogo.
     const sm = GerenciadorState();
 
     const $mensagens = document.getElementById('mensagens');
@@ -7,6 +18,13 @@
 
     function enviarMensagem(from, text) {
         estado.mensagens.push({from, text});
+
+        /** 
+         * *Padrão Observer:* Publica o evento 'mensagemAdicionada'.
+         * Qualquer componente que se inscreveu para este evento (como a função
+         * de renderização) será notificado e reagirá.
+         * 
+        */
         EventBus.publish('mensagemAdicionada', {from,text});
     }
 
@@ -54,9 +72,16 @@
     }
     
     function handleEscolhas(escolha){
+
+        /** *Padrão Strategy:* Se a escolha tiver uma estratégia (comportamento)
+         * associada, a função a executa, passando a única instância do
+         * estado do jogo como contexto. Isso desacopla a ação da escolha.
+        */
         if(escolha.strategy){
           escolha.strategy(estado);
         }
+
+        // *Padrão State:* Transita para o próximo estado (bloco de diálogo) se a escolha definir um.
         if(escolha.next) sm.go(escolha.next, {escolha});
     }
 
@@ -71,11 +96,15 @@
         })
     }
 
+    // *Padrão Observer:* Assina eventos no EventBus. A função `renderizarMensagem` será chamada sempre que uma nova mensagem for publicada.
     EventBus.subscribe('mensagemAdicionada', renderizarMensagem);
     EventBus.subscribe('estadoAlterado', (e) => {
         console.log("Estado mudou: ", e.estado);
     });
 
+
+    // *Padrão State:* Aqui registramos todos os estados do jogo.
+    /** Cada função representa um "estado" e contém a lógica para aquele bloco de diálogo. Isso torna a lógica do jogo mais organizada.*/
     sm.register('intro', ()=>{
 
         estado.mensagens.push({
@@ -190,9 +219,6 @@
         showEscolhas([
             {text:'Que lugar? A minha irmã está em um orfanato', next:'bloco4A'},
             {text:'Que tipo de procedimentos são esses?', next:'bloco4B'}
-            //{text:'Tentar salvar todos (arriscado)', strategy:Strategies.saveAll, next:'confrontation'},
-            //{text:'Salvar apenas a irmã', strategy:Strategies.saveSister, next:'confrontation'},
-            //{text:'Incendiar o local', strategy:Strategies.burnEverything, next:'confrontation'}
         ]);
     });
 
@@ -386,18 +412,29 @@
         setTimeout(mostrarAviso, 1000);
     });
 
-    // Aqui iniciamos o jogo
+    /**
+     * //Strategy
+     * sm.register('final', () => {
+     * 
+     * showEscolhas([
+     *   {text:'Tentar salvar todos (arriscado)', strategy:Strategies.saveAll,next:'confrontation'},
+     *   {text:'Salvar apenas a irmã', strategy:Strategies.saveSister, next:'confrontation'},
+     *   {text:'Incendiar o local', strategy:Strategies.burnEverything, next:'confrontation'}
+     * ]);
+     * 
+     * });
+     */
+
+    // *Padrão State:* Inicia o jogo no estado definido no `JogoEstado`.
     sm.go(estado.capitulo);
     renderizarMensagem();
     
 })();
 
-// fecha modal
 document.getElementById('close-modal').addEventListener('click', () => {
     document.getElementById('imagem-modal').classList.add('hidden');
 });
 
-// fecha clicando no fundo
 document.getElementById('imagem-modal').addEventListener('click', (e) => {
     if (e.target.id === 'imagem-modal') {
         document.getElementById('imagem-modal').classList.add('hidden');
