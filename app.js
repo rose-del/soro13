@@ -68,70 +68,224 @@
 
     sm.register('intro', ()=>{
 
-        /**estado.mensagens.push({
+        estado.mensagens.push({
             from: 'them',
-            type: 'video',
-            src: '',
-            autoplay: true,
-            muted: true
+            type: 'image',
+            src: './public/image/ficha-agatha.png',
         });
-        EventBus.publish('mensagemAdicionada');**/
+        EventBus.publish('mensagemAdicionada');
 
-        enviarMensagem('them', '(ligação cortada por gritos...)');
-        enviarMensagem('sistema', 'No dia seguinte você encontra uma mensagem anônima com fichas médicas de Villa Hope.');
+        enviarMensagem('them', 'Você viu a foto?');
+
         showEscolhas([
-          {text:'Ir até o Hospital St. Mary', next:'stMary'},
-          {text:'Pesquisar Villa Hope na Biblioteca', next:'library'},
-          {text:'Conversar com Ethan Cross', next:'ethan'}
-        ]);
-      });
-    
-    sm.register('stMary', ()=>{
-        enviarMensagem('them', 'No St. Mary os registros parecem adulterados.');
-        enviarMensagem('sistema', 'Você encontra pistas que sugerem transferência para Villa Hope há 1 ano.');
-        showEscolhas([
-          {text:'Ir à Biblioteca Municipal', next:'library'},
-          {text:'Procurar ex-pacientes', next:'expatient'}
+            {text: 'Quem é você?', next: 'bloco2A'},
+            {text: 'Por que você tem isso da minha irmã?', next: 'bloco2B'},
+            {text: 'Se for uma ameaça, está perdendo tempo.', next: 'bloco2C'}
         ]);
     });
     
-    sm.register('library', ()=>{
-        enviarMensagem('them', 'O bibliotecário: "Ward nunca foi preso. Ele sumiu depois do incêndio."');
-        enviarMensagem('sistema', 'Você encontra fotos recentes da sua irmã datadas de 3 dias atrás.');
+    sm.register('bloco2A', ()=>{
+        enviarMensagem('sistema', 'Quem é você?');
+
+        enviarMensagem('them', 'Não importa quem eu sou');
+        enviarMensagem('them', 'Mas saiba que não estou te ameaçando. Na verdade estou tentando abrir seus olhos.');
+
         showEscolhas([
-          {text:'Investigar área industrial abandonada', next:'industrial'},
-          {text:'Falar com Ethan', next:'ethan'}
+          {text:'Abrir meus olhos pra quê?', next:'bloco3A'},
         ]);
     });
     
-    sm.register('expatient', ()=>{
-        enviarMensagem('them', 'Um ex-paciente sussurra sobre "A Sala da Metamorfose".');
+    sm.register('bloco2B', ()=>{
+        enviarMensagem('sistema', 'Por que você tem isso da minha irmã?');
+
+        enviarMensagem('them', 'Sua irmã nunca te contou tudo. Nem sobre o hospital. Nem sobre o que fizeram com ela lá.');
+
         showEscolhas([
-          {text:'Ir para a área industrial', next:'industrial'},
-          {text:'Voltar ao St. Mary', next:'stMary'}
+          {text:'Você está mentindo.', next:'bloco3B'},
+          {text:'O que foi que fizeram com ela?', next:'bloco3B'},
+          {text: 'E o que você sabe sobre a minha irmã', next: 'bloco3B'}
+        ]);
+    });
+
+    sm.register('bloco2C', ()=>{
+        enviarMensagem('sistema', 'Se for uma ameaça, está perdendo tempo.');
+
+        enviarMensagem('them', 'Não estou te ameaçando. Saiba que na verdade estou tentando abrir seus olhos.');
+
+        showEscolhas([
+          {text:'Abrir meus olhos pra quê?', next:'bloco3A'},
         ]);
     });
     
-    sm.register('ethan', ()=>{
-        enviarMensagem('them', 'Ethan: "Minha namorada Clara desapareceu também. Eu tenho contatos que apontam para um laboratório na área industrial."');
+    sm.register('bloco3A', ()=>{
+        enviarMensagem('sistema', 'Abrir meus olhos pra quê?');
+
+        enviarMensagem('them', 'Sua irmã nunca te contou tudo. Nem sobre o hospital. Nem sobre o que fizeram com ela lá.');
         showEscolhas([
-          {text:'Ir para a área industrial', next:'industrial'},
-          {text:'Revisar as fotos da irmã', next:'library'}
+          {text:'Você está mentindo.', next:'bloco3B'},
+          {text:'O que foi que fizeram com ela?', next:'bloco3C'},
+          {text: 'E o que você sabe sobre a minha irmã', next: 'bloco3D'}
         ]);
     });
     
-    // Clímax: área industrial com decisões importantes
-    sm.register('industrial', () => {
-        enviarMensagem('them', 'Você chegou ao laboratório improvisado. Sons abafados, frascos e seringas por toda parte.');
-        enviarMensagem('them', 'A irmã aparece, alternando lucidez e agressividade. Ward está lá.');
+    sm.register('bloco3B', ()=>{
+        enviarMensagem('sistema', 'Você está mentindo.');
+
+        estado.mensagens.push({
+            from: 'them',
+            type: 'image',
+            src: './public/image/registros.png',
+        });
+        EventBus.publish('mensagemAdicionada');
+
+        enviarMensagem('them', 'Acredite eu estive lá, no mesmo lugar que a sua irmã estava. Vi coisas que ninguém deveria ver...');
         showEscolhas([
-            {text:'Tentar salvar todos (arriscado)', strategy:Strategies.saveAll, next:'confrontation'},
-            {text:'Salvar apenas a irmã', strategy:Strategies.saveSister, next:'confrontation'},
-            {text:'Incendiar o local', strategy:Strategies.burnEverything, next:'confrontation'}
-            ]);
+          {text:'Que lugar? A minha irmã está em um orfanato', next:'bloco4A'},
+          {text:'Que tipo de procedimentos são esses?', next:'bloco4B'}
+        ]);
     });
     
-    // 🔹 Aqui iniciamos o jogo
+    sm.register('bloco3C', () => {
+        enviarMensagem('sistema', 'O que foi que fizeram com ela?');
+        
+        estado.mensagens.push({
+            from: 'them',
+            type: 'image',
+            src: './public/image/registros.png',
+        });
+        EventBus.publish('mensagemAdicionada');
+
+        enviarMensagem('them', 'Se quiser respostas, vai ter que me ajudar a procurá-las.');
+        enviarMensagem('them', 'Não sei exatamente o que fizeram com a sua irmã nesse lugar, mas sei que foram coisas terríveis.');
+
+        showEscolhas([
+            {text:'Que lugar? A minha irmã está em um orfanato', next:'bloco4A'},
+            {text:'Que tipo de procedimentos são esses?', next:'bloco4B'}
+            //{text:'Tentar salvar todos (arriscado)', strategy:Strategies.saveAll, next:'confrontation'},
+            //{text:'Salvar apenas a irmã', strategy:Strategies.saveSister, next:'confrontation'},
+            //{text:'Incendiar o local', strategy:Strategies.burnEverything, next:'confrontation'}
+        ]);
+    });
+
+    sm.register('bloco3D', () => {
+        enviarMensagem('sistema', 'E o que você sabe sobre a minha irmã');
+
+        estado.mensagens.push({
+            from: 'them',
+            type: 'image',
+            src: './public/image/registros.png',
+        });
+        EventBus.publish('mensagemAdicionada');
+
+        enviarMensagem('them', 'Se quiser respostas, vai ter que me ajudar a procurá-las.');
+        enviarMensagem('them', 'Não sei exatamente o que fizeram com a sua irmã nesse lugar, mas sei que foram coisas terríveis.');
+
+        showEscolhas([
+            {text:'Que lugar? A minha irmã está em um orfanato', next:'bloco4A'},
+            {text:'Que tipo de procedimentos são esses?', next:'bloco4B'}
+            //{text:'Tentar salvar todos (arriscado)', strategy:Strategies.saveAll, next:'confrontation'},
+            //{text:'Salvar apenas a irmã', strategy:Strategies.saveSister, next:'confrontation'},
+            //{text:'Incendiar o local', strategy:Strategies.burnEverything, next:'confrontation'}
+        ]);
+    });
+
+    sm.register('bloco4A', ()=>{
+        enviarMensagem('sistema', 'Que lugar? A minha irmã está em um orfanato');
+        
+        enviarMensagem('them', 'Não é bem assim... aquele lugar tem outra face.');
+        enviarMensagem('them', 'Olhe no registro de procedimento... o nome "Dr. Verruct" aparece algumas vezes. Você lembra dele?');
+        
+        showEscolhas([
+            {text:'Não pode ser... Esse Dr. Verruct por acaso seria o dono do orfanato?', next:'bloco5A'},
+            {text:'Não lembro de nínguem com esse nome', next:'bloco5B'}
+        ]);
+    });
+
+    sm.register('bloco4B', () => {
+        enviarMensagem('sistema', 'Que tipo de procedimentos são esses?');
+   
+        estado.mensagens.push({
+            from: 'them',
+            type: 'image',
+            src: './public/image/desenho-testes.png',
+        });
+        EventBus.publish('mensagemAdicionada');
+
+        enviarMensagem('them', 'Olhe no registro de procedimento... o nome "Dr. Verruct" aparece algumas vezes. Você lembra dele?');
+        
+        showEscolhas([
+            {text:'Não pode ser... Esse Dr. Verruct por acaso seria o dono do orfanato?', next:'bloco5A'},
+            {text:'Não lembro de nínguem com esse nome', next:'bloco5B'}
+        ]);
+
+    });
+
+    sm.register('bloco5A', () => {
+        enviarMensagem('sistema', 'Não pode ser... Esse Dr. Verruct por acaso seria o dono do orfanato?');
+
+        estado.mensagens.push({
+            from: 'them',
+            type: 'image',
+            src: './public/image/foto-orfanato.png',
+        });
+        EventBus.publish('mensagemAdicionada');
+
+        enviarMensagem('them', 'Sim, ele mesmo');
+        enviarMensagem('them', 'Esse homem já destruiu muitas vidas.');
+
+        showEscolhas([
+            {text: 'Por que está me mandando tudo isso?', next: 'bloco6A'}
+        ]);
+    });
+
+    sm.register('bloco5B', () => {
+        enviarMensagem('sistema', 'Não lembro de nínguem com esse nome');
+
+        estado.mensagens.push({
+            from: 'them',
+            type: 'image',
+            src: './public/image/foto-orfanato.png',
+        });
+        EventBus.publish('mensagemAdicionada');
+
+        enviarMensagem('them', 'Esse é o mesmo homem que é dono do orfanato onde sua irmã estava...');
+        enviarMensagem('them', 'Esse homem já destruiu muitas vidas.');
+
+        showEscolhas([
+            {text: 'Por que está me mandando tudo isso?', next: 'bloco6A'}
+        ]);
+    });
+
+    sm.register('bloco6A', () => {
+        enviarMensagem('sistema', 'Por que está me mandando tudo isso?');
+
+        enviarMensagem('them', 'Porque eu quero vingança e só você pode me ajudar');
+
+        showEscolhas([
+            {text: 'O que aconteceu com você?', next: 'bloco7A'},
+            {text: 'Vingança? Por acaso alguém próximo seu também passou por esse Dr. Verruct?', next: 'bloco7B'}
+        ]);
+    })
+    
+    sm.register('bloco7A', () => {
+        enviarMensagem('sistema', 'O que aconteceu com você?');
+
+        enviarMensagem('them', 'Não foi comigo mas sim com a minha namorada');
+        enviarMensagem('them', 'Eramos todos do mesmo "orfanato" que você e a sua irmã. Eu e a Paty chegamos logo depois de você ter sido adotada... Bom, foi isso que a sua irmã falou para nós a 10 anos atrás');
+
+        showEscolhas([
+            {text: 'Sim, quando um casal foi ao orfananto ele ficou interessado em nós duas, mas eles infelizmente só levou uma embora... Quantos anos vocês tinham naquele tempo?', next: 'bloco8A'},
+        ]);
+    });
+
+    sm.register('bloco8A', () => {
+        enviarMensagem('sistema', 'Sim, quando um casal foi ao orfananto ele ficou interessado em nós duas, mas eles infelizmente só levou uma embora... Quantos anos vocês tinham naquele tempo?');
+
+        enviarMensagem('them', 'Tinhamos 9 anos naquela época quando fomos transferidos para esse orfanato. Tudo ia bem, até que crescemos, ficamos maior de idade e o pessoal do orfanato começou a fazer coisas estranhas.')
+        enviarMensagem('them', 'Crianças sumindo, gritos... Até que houve um dia em que a Paty, minha namorada, não apareceu mais.')
+    })
+    
+    // Aqui iniciamos o jogo
     sm.go(estado.capitulo);
     renderizarMensagem();
     
