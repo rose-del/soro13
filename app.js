@@ -8,18 +8,6 @@
     function enviarMensagem(from, text) {
         estado.mensagens.push({from, text});
         EventBus.publish('mensagemAdicionada', {from,text});
-
-        const chatContainer = document.getElementById('chat-container');
-
-        function addMenssagem(text) {
-            const msg = document.createElement('div');
-            msg.className = 'msg';
-            msg.textContent = text;
-            document.getElementById('messages').appendChild(msg);
-
-            // força rolagem até a última mensagem
-            chatContainer.scrollTop = chatContainer.scrollHeight;
-        }
     }
 
     function renderizarMensagem() {
@@ -36,6 +24,16 @@
                 img.src = m.src;
                 img.alt = 'imagem';
                 img.className = 'msg-img';
+                img.style.cursor = 'pointer';
+
+                // clique para abrir modal
+                img.addEventListener('click', () => {
+                    const modal = document.getElementById('imagem-modal');
+                    const modalImg = document.getElementById('modal-img');
+                    modalImg.src = m.src;
+                    modal.classList.remove('hidden');
+                });
+
                 div.appendChild(img);
             } 
             else if (m.type === 'video') {
@@ -317,27 +315,12 @@
         enviarMensagem('them', 'Mas cada vez que voltava… Voltava diferente.');
 
         showEscolhas([
-            {text: '(não dizer nada)', next: 'bloco9C'},
             {text: 'Eu sinto muito por isso', next: 'bloco9B'}
         ]);
     });
     
     sm.register('bloco9B', () => {
         enviarMensagem('sistema', 'Eu sinto muito por isso');
-
-        enviarMensagem('them', 'Eles… eles diziam que era uma chance.');
-        enviarMensagem('them', 'Chamavam algumas meninas do orfanato para "ajudar" no hospital do velho dono. Paty foi uma delas');
-        enviarMensagem('them', 'Lembro da felicidade dela… parecia que finalmente teria um propósito, algo além daqueles corredores frios.')
-        enviarMensagem('them', 'Mas cada vez que voltava… Voltava diferente.');
-
-        showEscolhas([
-            {text: 'Diferente como?', next: 'bloco10A'},
-            {text: 'O que houve com ela', next: 'bloco10B'}
-        ]);
-    });
-
-    sm.register('bloco9C', () => {
-        enviarMensagem('sistema', '');
 
         enviarMensagem('them', 'Eles… eles diziam que era uma chance.');
         enviarMensagem('them', 'Chamavam algumas meninas do orfanato para "ajudar" no hospital do velho dono. Paty foi uma delas');
@@ -357,7 +340,7 @@
         enviarMensagem('them', 'Até que um dia ela simplesmente não voltou.');
 
         showEscolhas([
-            {text: 'E como você sabe que o responsável foi o Dr. Verruct?', next: '11A'}
+            {text: 'E como você sabe que o responsável foi o Dr. Verruct?', next: 'bloco11A'}
         ]);
     });
 
@@ -395,6 +378,12 @@
             src: './public/image/foto-atofinal.png',
         });
         EventBus.publish('mensagemAdicionada');
+        enviarMensagem('them', 'A minha namorada');
+
+        const $escolhas = document.getElementById('escolhas');
+        $escolhas.innerHTML = '';
+
+        setTimeout(mostrarAviso, 1000);
     });
 
     // Aqui iniciamos o jogo
@@ -402,3 +391,23 @@
     renderizarMensagem();
     
 })();
+
+// fecha modal
+document.getElementById('close-modal').addEventListener('click', () => {
+    document.getElementById('imagem-modal').classList.add('hidden');
+});
+
+// fecha clicando no fundo
+document.getElementById('imagem-modal').addEventListener('click', (e) => {
+    if (e.target.id === 'imagem-modal') {
+        document.getElementById('imagem-modal').classList.add('hidden');
+    }
+});
+
+function mostrarAviso() {
+  document.getElementById("caixa-aviso").classList.remove("hidden");
+}
+
+function fecharAviso() {
+  document.getElementById("caixa-aviso").classList.add("hidden");
+}
