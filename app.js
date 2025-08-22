@@ -8,6 +8,18 @@
     function enviarMensagem(from, text) {
         estado.mensagens.push({from, text});
         EventBus.publish('mensagemAdicionada', {from,text});
+
+        const chatContainer = document.getElementById('chat-container');
+
+        function addMenssagem(text) {
+            const msg = document.createElement('div');
+            msg.className = 'msg';
+            msg.textContent = text;
+            document.getElementById('messages').appendChild(msg);
+
+            // força rolagem até a última mensagem
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
     }
 
     function renderizarMensagem() {
@@ -48,7 +60,7 @@
           escolha.strategy(estado);
         }
         if(escolha.next) sm.go(escolha.next, {escolha});
-      }
+    }
 
     function showEscolhas(escolhas) {
         $escolhas.innerHTML = '';
@@ -161,9 +173,6 @@
         showEscolhas([
             {text:'Que lugar? A minha irmã está em um orfanato', next:'bloco4A'},
             {text:'Que tipo de procedimentos são esses?', next:'bloco4B'}
-            //{text:'Tentar salvar todos (arriscado)', strategy:Strategies.saveAll, next:'confrontation'},
-            //{text:'Salvar apenas a irmã', strategy:Strategies.saveSister, next:'confrontation'},
-            //{text:'Incendiar o local', strategy:Strategies.burnEverything, next:'confrontation'}
         ]);
     });
 
@@ -361,7 +370,7 @@
         
 
         showEscolhas([
-            {text: 'E como você sabe que o responsável foi o Dr. Verruct?', next: '11A'}
+            {text: 'E como você sabe que o responsável foi o Dr. Verruct?', next: 'bloco11A'}
         ]);
     });
 
@@ -386,11 +395,6 @@
             src: './public/image/foto-atofinal.png',
         });
         EventBus.publish('mensagemAdicionada');
-        
-
-        showEscolhas([
-            {text: 'Final do capítulo 1', next: '11B'}
-        ]);
     });
 
     // Aqui iniciamos o jogo
